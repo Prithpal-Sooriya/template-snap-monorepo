@@ -61,12 +61,14 @@ export const getSnap = async (version?: string): Promise<Snap | undefined> => {
  */
 
 export const sendHello = async () => {
+  console.log('snap origin', defaultSnapOrigin);
   await window.ethereum.request({
     method: 'wallet_invokeSnap',
     params: [
-      defaultSnapOrigin,
+      defaultSnapOrigin, // Host for snap server (http://localhost:8080)
       {
         method: 'hello',
+        params: { context: 'my additional context' }, // awesome can send params through here!!
       },
     ],
   });
