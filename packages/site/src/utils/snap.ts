@@ -61,7 +61,7 @@ export const getSnap = async (version?: string): Promise<Snap | undefined> => {
  */
 
 export const sendHello = async () => {
-  console.log('snap origin', defaultSnapOrigin);
+  // console.log('snap origin', defaultSnapOrigin);
   await window.ethereum.request({
     method: 'wallet_invokeSnap',
     params: [

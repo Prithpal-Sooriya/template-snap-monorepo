@@ -16,6 +16,17 @@ export const getMessage = (originString: string): string =>
 // https://docs.metamask.io/guide/snaps-development-guide.html#the-snap-lifecycle
 // How would we initialise the interval
 
+// TEST - create variable and store on window, does this variable persist (might be removed from SES)
+// window.mySnapVar = 'helloooo'; // yep this is removed when snap ends
+
+// TEST - create a interval that updates a variable every second, when calling that variable on a confirm, does it change?
+// let value = 0; // variables can be changed within functions, but will be reset if span dies.
+// const interval = setInterval(() => { // intervals didn't work
+//   value += 1;
+// }, 1000);
+
+// TEST - can we utilise CRON to initialise a websocket?
+
 /*
 
 Snaps are ran in browser, but in a Secure EcmaScript Env.
@@ -53,8 +64,10 @@ Problems:
  * @throws If the `snap_confirm` call failed.
  */
 export const onRpcRequest: OnRpcRequestHandler = ({ origin, request }) => {
+  // value += 1; // if we have a variable outside snap & snap isn't dead, then value is persisted
+
   const msg = JSON.stringify(request, null, 2);
-  // const msg = typeof window.ethereum;
+  // const msg = `hello: ${value}`;
 
   switch (request.method) {
     case 'hello':
