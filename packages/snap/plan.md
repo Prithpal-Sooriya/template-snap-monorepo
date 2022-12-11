@@ -85,3 +85,11 @@ MM Snaps favours Polling over Subscriptions
 
 - kinds makes sense since low cost, but means no instant notifications...
 - No (Current) easy way to create a snap template for different DApps.
+
+- EXTRA WORK
+
+  - Create DB connector that pipes data
+  - Add new column called (notified: bool)
+  - SNAP CRON - User can query 5 latest rows, update notify flag, send notifications
+
+  - Downside - API expensive, not instant (delayed by CRON interval)
