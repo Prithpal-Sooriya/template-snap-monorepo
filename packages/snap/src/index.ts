@@ -52,6 +52,39 @@ Problems:
 
 */
 
+let counter = 0;
+const heartbeat = () => {
+  console.log('HEARTBEAT');
+  counter += 1;
+  // wallet.request({
+  //   method: 'wallet_getSnaps',
+  // });
+
+  // wallet.request({
+  //   // method: 'heartbeat',
+  //   // params: { snap: "I'm alive" },
+  // });
+};
+
+let interval: NodeJS.Timer | null = null;
+const HEARTBEAT_MS = 1000;
+const initialiseSnap = () => {
+  if (!interval) {
+    console.log('Initiailise Snap & starting heartbeat');
+    interval = setInterval(() => {
+      heartbeat();
+    }, HEARTBEAT_MS);
+  }
+};
+
+const cleanSnap = () => {
+  if (interval) {
+    console.log('Killing Snap, Cleanup');
+    interval && clearInterval(interval);
+    interval = null;
+  }
+};
+
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
  *
@@ -64,10 +97,10 @@ Problems:
  * @throws If the `snap_confirm` call failed.
  */
 export const onRpcRequest: OnRpcRequestHandler = ({ origin, request }) => {
-  // value += 1; // if we have a variable outside snap & snap isn't dead, then value is persisted
+  // const msg = JSON.stringify(request, null, 2);
 
-  const msg = JSON.stringify(request, null, 2);
-  // const msg = `hello: ${value}`;
+  // test that counter has reset
+  const msg = `hello: ${counter}`;
 
   switch (request.method) {
     case 'hello':
@@ -89,11 +122,29 @@ export const onRpcRequest: OnRpcRequestHandler = ({ origin, request }) => {
   }
 };
 
-/*
-request shape
-{
-  "jsonrpc": "2.0",
-  "id": "04CZts2oMtCH-VaUXckgG",
-  "method": "hello"
+export const onCronjob: OnRpcRequestHandler = ({ request }) => {
+  console.log('ON CRON', typeof interval, counter);
+
+  switch (request.method) {
+    case 'cronjobMethod': {
+      console.log('CRON - Starting Snap');
+      // startSnap();
+      break;
+    }
+    default:
+      throw new Error('Method not found.');
+  }
+};
+
+// eslint-disable-next-line jsdoc/require-jsdoc
+function startSnap() {
+  let exitCondition = false;
+  setTimeout(() => (exitCondition = true), 60000);
+
+  initialiseSnap();
+  // eslint-disable-next-line no-unmodified-loop-condition, curly
+  while (!exitCondition); // do nothing
+
+  // Cleanup
+  cleanSnap();
 }
-*/
