@@ -1,13 +1,13 @@
 {
   "version": "0.1.0",
-  "description": "An example Snap written in TypeScript.",
-  "proposedName": "TypeScript Example Snap",
+  "description": "HAL Example Snap Template",
+  "proposedName": "HAL Example Snap",
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/template-snap-monorepo.git"
   },
   "source": {
-    "shasum": "iwEi58fiLZKEGDKRD7T1Yg1id1RMtL84DIUXFHqylr0=",
+    "shasum": "P0CE2ZulVDCmug7QMm+oLPvovyTLTwCAQTlqArUkb7U=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -24,7 +24,7 @@
     "endowment:cronjob": {
       "jobs": [
         {
-          "expression": "* * * * *",
+          "expression": "*/5 * * * *",
           "request": {
             "method": "cronjobMethod",
             "params": [

@@ -93,3 +93,9 @@ MM Snaps favours Polling over Subscriptions
   - SNAP CRON - User can query 5 latest rows, update notify flag, send notifications
 
   - Downside - API expensive, not instant (delayed by CRON interval)
+
+
+Note - have a look at snapshot snap
+- https://github.com/iamminci/snapshot
+
+They do a crazy while loop to keep the instance (we could do that, is it bad?)

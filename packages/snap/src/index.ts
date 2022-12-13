@@ -52,38 +52,38 @@ Problems:
 
 */
 
-let counter = 0;
-const heartbeat = () => {
-  console.log('HEARTBEAT');
-  counter += 1;
-  // wallet.request({
-  //   method: 'wallet_getSnaps',
-  // });
+// let counter = 0;
+// const heartbeat = () => {
+//   console.log('HEARTBEAT');
+//   counter += 1;
+//   // wallet.request({
+//   //   method: 'wallet_getSnaps',
+//   // });
 
-  // wallet.request({
-  //   // method: 'heartbeat',
-  //   // params: { snap: "I'm alive" },
-  // });
-};
+//   // wallet.request({
+//   //   // method: 'heartbeat',
+//   //   // params: { snap: "I'm alive" },
+//   // });
+// };
 
-let interval: NodeJS.Timer | null = null;
-const HEARTBEAT_MS = 1000;
-const initialiseSnap = () => {
-  if (!interval) {
-    console.log('Initiailise Snap & starting heartbeat');
-    interval = setInterval(() => {
-      heartbeat();
-    }, HEARTBEAT_MS);
-  }
-};
+// let interval: NodeJS.Timer | null = null;
+// const HEARTBEAT_MS = 1000;
+// const initialiseSnap = () => {
+//   if (!interval) {
+//     console.log('Initiailise Snap & starting heartbeat');
+//     interval = setInterval(() => {
+//       heartbeat();
+//     }, HEARTBEAT_MS);
+//   }
+// };
 
-const cleanSnap = () => {
-  if (interval) {
-    console.log('Killing Snap, Cleanup');
-    interval && clearInterval(interval);
-    interval = null;
-  }
-};
+// const cleanSnap = () => {
+//   if (interval) {
+//     console.log('Killing Snap, Cleanup');
+//     interval && clearInterval(interval);
+//     interval = null;
+//   }
+// };
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
@@ -100,7 +100,7 @@ export const onRpcRequest: OnRpcRequestHandler = ({ origin, request }) => {
   // const msg = JSON.stringify(request, null, 2);
 
   // test that counter has reset
-  const msg = `hello: ${counter}`;
+  const msg = `hello`;
 
   switch (request.method) {
     case 'hello':
@@ -123,12 +123,23 @@ export const onRpcRequest: OnRpcRequestHandler = ({ origin, request }) => {
 };
 
 export const onCronjob: OnRpcRequestHandler = ({ request }) => {
-  console.log('ON CRON', typeof interval, counter);
+  // console.log('ON CRON', typeof interval, counter);
 
   switch (request.method) {
     case 'cronjobMethod': {
       console.log('CRON - Starting Snap');
       // startSnap();
+      // Ideally fetch from API (and somehow know that the event has not been notified before)
+      // E.g. column to flag if stream event was notified
+      return wallet.request({
+        method: 'snap_notify',
+        params: [
+          {
+            type: 'inApp',
+            message: 'Noti Stream: 2e91eaa0-d5d4-48a2-adee-546c1ed29245', // Must be below 50 chars
+          },
+        ],
+      });
       break;
     }
     default:
@@ -137,14 +148,14 @@ export const onCronjob: OnRpcRequestHandler = ({ request }) => {
 };
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-function startSnap() {
-  let exitCondition = false;
-  setTimeout(() => (exitCondition = true), 60000);
+// function startSnap() {
+//   let exitCondition = false;
+//   setTimeout(() => (exitCondition = true), 60000);
 
-  initialiseSnap();
-  // eslint-disable-next-line no-unmodified-loop-condition, curly
-  while (!exitCondition); // do nothing
+//   initialiseSnap();
+//   // eslint-disable-next-line no-unmodified-loop-condition, curly
+//   while (!exitCondition); // do nothing
 
-  // Cleanup
-  cleanSnap();
-}
+//   // Cleanup
+//   cleanSnap();
+// }
